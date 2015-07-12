@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="context" value="<%=request.getContextPath() %>"></c:set>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <!doctype html> <!-- html:5  html5로 기본 구성잡기 -->
 <html lang="en">
 <head>
@@ -17,12 +18,12 @@
 			<div>
 			<br />
 				<table class="tab" align="center">
-					<tr class="tab" style="height: 50px">
-						<td class="tab"><a href="#">방명록</a></td>
-						<td class="tab"><a href="#">답글게시판</a></td>
-						<td class="tab"><a href="#">자료실</a></td>
+					<tr style="height: 50px">
+						<td ><a href="#">방명록</a></td>
+						<td ><a href="#">답글게시판</a></td>
+						<td ><a href="#">자료실</a></td>
 					</tr>
-					<tr class="tab">
+					<tr >
 						<td colspan="3">
 						
 						</td>

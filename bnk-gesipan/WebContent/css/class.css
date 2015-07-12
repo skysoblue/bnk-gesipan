@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+
+.clear{
+	clear: both;
+}
+
+.centT{
+	font-size: 30px; 
+	text-align: center;	
+}
+
+.centT{
+	font-size: 30px; 
+	text-align: center;
+	font: bold;
+}
+
+
+.center{
+	table-layout: 
+}
+.centTd{
+	 font-size: 50px;
+	 text-align: center;
+}
+.tab{
+	border: 1px solid black;
+	font-size: 21px;
+	font: bold;
+}
+
+.hidden{
+	display:none;
+}
+
+	

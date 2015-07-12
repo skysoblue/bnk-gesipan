@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <!-- -->
     <style>
-        @IMPORT url("<%=request.getContextPath()%>/css/member.css");
+        @IMPORT url("<%=request.getContextPath()%>/css/common.css");
    </style>
  
     
@@ -44,6 +44,9 @@
                 <td colspan="2">
                     <!-- <input type="submit" value="전 송" /> -->
                     <img src="<%=request.getContextPath()%>/image/btnJoin.jpg" 
+                            style="cursor: pointer;width: 150px;" 
+                    alt="" onclick="return Member.join()"/>
+                      <img src="<%=request.getContextPath()%>/image/btnJoin.jpg" 
                             style="cursor: pointer;width: 150px;" 
                     alt="" onclick="return Member.join()"/>
                 </td>

@@ -38,6 +38,11 @@ public class MemberController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
         switch (path) {
+        case "/member/joinForm.do" :
+            RequestDispatcher dispatcher2 
+            = request.getRequestDispatcher("/view/joinForm.jsp");
+            dispatcher2.forward(request, response);
+            break;
         case "/member/searchIdForm.do" :
             RequestDispatcher dispatcher3 
             = request.getRequestDispatcher("/view/searchIdForm.jsp");

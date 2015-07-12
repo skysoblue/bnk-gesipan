@@ -1,7 +1,7 @@
 /**
  * 
  */
-var Member = {
+var member = {
 	nochk : function (url) {
 	    alert("동의하지 않으면 가입하실 수 없습니다");
 	},
@@ -41,9 +41,13 @@ var Member = {
 	
 		document.frmJoin.submit();
 	},
+	joinForm : function() {
+		
+	},
 	
 	login : function() {
 	
 		document.frmLogin.submit();
 	}
+	
 }
