@@ -45,10 +45,10 @@
                     <!-- <input type="submit" value="전 송" /> -->
                     <img src="<%=request.getContextPath()%>/image/btnJoin.jpg" 
                             style="cursor: pointer;width: 150px;" 
-                    alt="" onclick="return Member.join()"/>
-                      <img src="<%=request.getContextPath()%>/image/btnJoin.jpg" 
+                    alt="" onclick="return member.join()"/>
+                      <img src="<%=request.getContextPath()%>/image/btnJoin.jpg" class="popupClose"
                             style="cursor: pointer;width: 150px;" 
-                    alt="" onclick="return Member.join()"/>
+                    alt="" onclick="return member.join()"/>
                 </td>
             </tr>
         </table>

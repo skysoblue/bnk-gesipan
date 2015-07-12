@@ -28,10 +28,8 @@ public class IndexController extends HttpServlet {
 		
 		switch (path) {
 		
-		case "home/main.do": url="/view/home/frame.jsp"; break;
-		case "bang/index.do": url="..."; break;
-		case "dap/index.do": url="..."; break;
-		default: break;
+		case "home/main.do": url="/view/home/frame.jsp";break;
+		default: url="/view/home/frame.jsp"; break;
 		}
 	
 		RequestDispatcher dispatcher 

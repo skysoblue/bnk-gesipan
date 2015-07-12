@@ -27,7 +27,7 @@
 	</nav>
 </header>
 <div id="joinForm" class="white-popup-block mfp-hide" 
-style='width:300px; height : 500px; background-color: white; margin : 0 auto;'>
+style='width:400px; height : 500px; background-color: white; margin : 0 auto;'>
 	<!-- <h1>모달 테스트</h1>
 	 -->
 	<jsp:include page="../member/joinForm.jsp"></jsp:include>
