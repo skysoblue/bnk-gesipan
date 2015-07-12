@@ -12,7 +12,7 @@
 <body>
 	<c:set var="hello" value="Hello" />
 	${hello}
-	<!-- scope 속성은 선택적이며 page로 기본 설정되어 있다. -->
+	<!-- scope 속성은 선택적이며 page로 기본 설정되어 있다.... -->
 	<c:set var="변수명" value="할당된 값"
 		scope="변수의 유효 범위 page|request|session|application" />
 
