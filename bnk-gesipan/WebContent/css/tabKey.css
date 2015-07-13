@@ -6,10 +6,11 @@
 .tabKey li.on, .tabKey li.on1{ border: none; width: 139px; height: 35px; background:#c1c1c1; color: #fff;}
 .tabKey li.on a, .tabKey li.on1 a{ color: #fff; }
 .tabKey div {color:#666; width:97%;}
-.depth {width:32%;text-align: center;border:1px solid black} 
-.tabKey .depth >div{display:none; font-size:30px; position:absolute; left:0; top:35px}
+.depth {width:600px;text-align: center;border:1px solid black;} 
+.tabKey .depth >div{display:none; font-size:12px; position:absolute; left:0; top:35px}
 .tabKey a {color:#444; text-decoration: none;}
 .tabKey a:hover{
 	color:yellow; text-decoration: none;
 }
+
 

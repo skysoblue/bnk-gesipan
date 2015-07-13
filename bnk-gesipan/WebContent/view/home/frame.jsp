@@ -14,14 +14,18 @@
 </head>
 <body>
 <div id="wrap" class="clear">
-	<jsp:include page="header.jsp"/>
-		<section class="content">
+	<div id="header">
+		<jsp:include page="header.jsp"/>
+	</div>
+		<div class="content">
 			<div>
 			<br />
 			<ul class="tabKey" style="width:1000px;">
 				<li class="depth" style="width:32%;text-align: center;border:1px solid black">
 					<a href="javascript:void(0);" style="width: 98%">방명록</a>
-					<div > 1 </div>
+					<div > 
+						<jsp:include page="../bang/table.jsp"></jsp:include>
+					 </div>
 				</li>
 				<li class="depth" style="width:32%;text-align: center;border:1px solid black">
 					<a href="javascript:void(1)"  style="width: 98%">답글게시판</a>
@@ -37,14 +41,25 @@
 				<br /><br /><br /><br />
 				
 				</div>
-			</section>
-</div>
+			</div>
+		</div>
+		<!-- 푸터감싸기 -->
+			<div id="footer">
+					<!-- 푸터영역안에 넣어줌. 푸터왼쪽위에 고정 -->
+					<jsp:include page="footer.jsp" />
+		</div>
+		<!-- //푸터감싸기 -->
+
+
+
+
+
 <script src="${context}/js/tabKey.js"></script>
+<script src="${context}/js/magnific-popup.js"></script>
 <script type="text/javascript">
 	$(function() {
 		tabKey.tab();
 	});
 </script>
-<jsp:include page="footer.jsp"/>
 </body>
 </html>

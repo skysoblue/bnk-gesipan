@@ -2,7 +2,7 @@
 /* Reset */
 html, body {
     width: 100%;	/* 100%는 화면 꽉 채우는것. 웹표준 정책에 따름 */
-    height: 100% 	/* 효과는 모니터는 스마트 폰이든 상관없이 출력 */
+    height: 900px; 	/* 효과는 모니터는 스마트 폰이든 상관없이 출력 */
 }
  
 html {
@@ -95,10 +95,6 @@ legend {
     *width: 0
 }
  
-table {
-    border-collapse: collapse;  	/* 테이블 사이에 간격을 주지 마라 */
-    border-spacing: 0;
-}
  
 input::-ms-clear {
     display: none
@@ -111,14 +107,14 @@ header {
     overflow: hidden; /* 위드, 하이트 값에 넘치는 이미지를 넣는 경우라도 잘리게 끔  처리 */
     background-color: #fcc
 }
-footer {
+ /* footer {
     width: 100%;
     height: 100px;
     position: relative;
     z-index: 20;
     overflow: hidden;
-  /*   background-color: #CCF */
-}
+   background-color: #CCF 
+}*/
 nav ul {
     list-style:none;
     float:right;
