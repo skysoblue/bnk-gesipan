@@ -38,11 +38,12 @@
         </table>
         </fieldset>
     </form>
-    <div>
+    <div style='margin : 0 auto;'>
         <span>
             <a href="#" onclick="searchId('${context}/member/searchIdForm.do')">
                 아이디 찾기</a>
         </span>
+        <span style="margin:0 10px "></span>
         <span>
             <a href="#" onclick="searchPass('${context}/member/searchPassForm.do')">
                 비밀번호 찾기</a>
