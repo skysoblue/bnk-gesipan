@@ -41,14 +41,16 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="2" >
                     <!-- <input type="submit" value="전 송" /> -->
-                    <img src="<%=request.getContextPath()%>/image/btnJoin.jpg" 
-                            style="cursor: pointer;width: 150px;" 
+                    <div style="width:200px; margin : 0 auto;">
+                    <img src="${context}/image/btnOk.jpg" 
+                            style="cursor: pointer;margin:0 auto" 
                     alt="" onclick="return member.join()"/>
-                      <img src="<%=request.getContextPath()%>/image/btnJoin.jpg" class="popupClose"
-                            style="cursor: pointer;width: 150px;" 
-                    alt="" onclick="return member.join()"/>
+                     <img src="${context}/image/btnNo.jpg" 
+                            style="cursor: pointer;" 
+                    alt="" class="popupClose"/>
+                    </div>
                 </td>
             </tr>
         </table>

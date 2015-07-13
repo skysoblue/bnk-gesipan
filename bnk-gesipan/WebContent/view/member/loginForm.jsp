@@ -25,9 +25,15 @@
             <tr>
                 <td colspan="2">
                     <!-- <input type="submit" value="전 송" /> -->
-                    <img src="${context}/images/btnLogin.jpg"
-                         style="cursor: pointer" alt="" onclick="return login()"/>
-                </td>
+                    <div style="width:200px; margin : 0 auto;">
+                    <img src="${context}/image/btnOk.jpg" 
+                            style="cursor: pointer;margin:0 auto" 
+                    alt="" onclick="return login()"/>
+                     <img src="${context}/image/btnNo.jpg" 
+                            style="cursor: pointer;" 
+                    alt="" class="popupClose"/>
+                    </div>
+                </td>     
             </tr>
         </table>
         </fieldset>

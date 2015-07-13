@@ -10,27 +10,34 @@
 <header id="top">
 	<div id="login">
 		<a href="#joinForm" id="aJoin" class="popupOpen">회원가입</a> | 
-		<a href="${context}/member/loginForm.do" id="aLogin" class="popupOpen">로그인</a> | 
+		<a href="#loginForm" id="aLogin" class="popupOpen">로그인</a> | 
 		<a href="${context}/home/siteMap.do">사이트맵</a>
 	</div>
 	<div class="clear"></div>
 	<nav id="topMenu">
-		<table id="noneT" align="center" style="width: 80%; height: 50px;">
+		<table id="noneT" align="center" style="width: 80%; height: 40px;">
 			<tr>
 				<td class="centT"><a href="${context}/home/main.do">HOME</a></td>
-				<td class="centT"><a href="${context}/member/admin.do">회원검색</a></td>
 				<td class="centT"><a href="${context}/bang/main.do">방명록</a></td>
 				<td class="centT"><a href="${context}/dap/main.do">답글게시판</a></td>
+				<td class="centT"><a href="${context}/jaro/main.do">자료실</a></td>
 			</tr>
 		</table>
 		
 	</nav>
 </header>
 <div id="joinForm" class="white-popup-block mfp-hide" 
-style='width:400px; height : 500px; background-color: white; margin : 0 auto;'>
+style='width:300px; height : 500px; background-color: white; margin : 0 auto;'>
 	<!-- <h1>모달 테스트</h1>
 	 -->
 	<jsp:include page="../member/joinForm.jsp"></jsp:include>
+
+</div>
+<div id="loginForm" class="white-popup-block mfp-hide" 
+style='width:300px; height : 500px; background-color: white; margin : 0 auto;'>
+	<!-- <h1>모달 테스트</h1>
+	 -->
+	<jsp:include page="../member/loginForm.jsp"></jsp:include>
 
 </div>
 <div class="clear"></div>
@@ -42,7 +49,11 @@ style='width:400px; height : 500px; background-color: white; margin : 0 auto;'>
 			type : 'inline',
 			preloader : false,
 			focus : '#username',
-			modal : true
+			modal : true,
+			closeContentPos : true,
+			fixedContentPos: true,
+	        alignTop: false, /* 최상단위치 */
+			showCloseBtn: true
 		});
 		$(document).on('click','.popupClose',function(e){
 			e.preventDefault();
