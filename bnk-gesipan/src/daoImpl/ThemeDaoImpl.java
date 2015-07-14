@@ -1,4 +1,4 @@
-package dao;
+package daoImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import bean.ThemeBean;
+import dao.CommonDAO;
 
 public class ThemeDaoImpl implements CommonDAO {
 	Connection conn = null;

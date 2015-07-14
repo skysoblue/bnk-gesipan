@@ -2,7 +2,7 @@ package bean;
 
 import java.util.Date;
 
-public class BangBean {
+public class AddrBean {
 	private int id;
     private Date register;
     private String name;

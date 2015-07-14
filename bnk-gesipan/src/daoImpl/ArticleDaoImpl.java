@@ -1,4 +1,4 @@
-package dao;
+package daoImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,25 +11,26 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import bean.BangBean;
+import bean.AddrBean;
+import dao.CommonDAO;
 import util.DBmanager;
 
-public class BangDaoImpl implements CommonDAO{
+public class ArticleDaoImpl implements CommonDAO{
 	Connection conn = null;
     PreparedStatement pstmt = null;
     Statement stmt = null;
     ResultSet rs = null;
     
-    BangBean bean = new BangBean();
+    AddrBean bean = new AddrBean();
     
-    private static BangDaoImpl bangDAO = new BangDaoImpl();
+    private static ArticleDaoImpl bangDAO = new ArticleDaoImpl();
     
-    private BangDaoImpl() {
+    private ArticleDaoImpl() {
         // 단위 테스트가 끝나고 프로젝트가 완성되면 걷어 낼 부분
         conn = DBmanager.getConnection();
     }
  
-    public static BangDaoImpl getInstance() {
+    public static ArticleDaoImpl getInstance() {
         return bangDAO;
     }
  

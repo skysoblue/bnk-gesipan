@@ -43,15 +43,9 @@
 				</div>
 			</div>
 		</div> <!-- wrap end -->
-		<!-- 푸터감싸기 -->
 			<div id="footer">
-					<!-- 푸터영역안에 넣어줌. 푸터왼쪽위에 고정 -->
 					<jsp:include page="footer.jsp" />
 		</div>
-		<!-- //푸터감싸기 -->
-
-
-
 
 
 <script src="${context}/js/tabKey.js"></script>

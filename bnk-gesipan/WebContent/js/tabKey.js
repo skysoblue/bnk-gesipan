@@ -1,5 +1,5 @@
 /**
- * 
+ * 탭키 만들기
  */
 var tabKey = {
 		tab : function() {
