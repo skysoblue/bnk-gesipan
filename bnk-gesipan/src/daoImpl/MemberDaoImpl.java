@@ -17,11 +17,10 @@ import dao.CommonDAO;
 import util.DBmanager;
 
 public class MemberDaoImpl implements CommonDAO{
-	Connection conn = null;
-    PreparedStatement pstmt = null;
-    Statement stmt = null;
-    ResultSet rs = null;
-    MemberBean bean = new MemberBean();
+	Connection connector;
+    PreparedStatement pstmt;
+    Statement stmt;
+    ResultSet rs;
     /*
      * 지금 보시는 내용이 싱글톤 + DBCP 정석입니다. 
      다만, 이것만 해서는 단위별 서버 실행에서 
@@ -33,7 +32,7 @@ public class MemberDaoImpl implements CommonDAO{
  
     private MemberDaoImpl() {
         // 단위 테스트가 끝나고 프로젝트가 완성되면 걷어 낼 부분
-        conn = DBmanager.getConnection();
+        connector = DBmanager.getConnection();
     }
  
     public static MemberDaoImpl getInstance() {
@@ -43,19 +42,19 @@ public class MemberDaoImpl implements CommonDAO{
     // 현재는 작동하지 않지만 위 DBmanager 를 걷어내는 순간
     // 작동함. 미리 설정함.
     public Connection getConnection() throws Exception {
-        Connection conn = null;
+        Connection connector = null;
         Context initContext = new InitialContext();
         Context envContext = (Context) initContext.lookup("java:/comp/env");
         DataSource ds = (DataSource) envContext.lookup("jdbc/myoracle");
-        conn = ds.getConnection();
-        return conn;
+        connector = ds.getConnection();
+        return connector;
     }
 
 
 	@Override
 	public int insert(Object obj) {
 		int result = 0;
-		
+		MemberBean bean = new MemberBean();
         String sql = 
            "insert into member(MEMBERID,PASSWORD,NAME,EMAIL,AGE)"
                 +" values( ? , ? , ? , ? , ? )";
@@ -66,7 +65,7 @@ public class MemberDaoImpl implements CommonDAO{
         	 * 그래서 pstmt 를 사용하자.
         	 * 그런데 
         	 * */ 
-            pstmt = conn.prepareStatement(sql);
+            pstmt = connector.prepareStatement(sql);
             
             pstmt.setString(1, bean.getId());
             pstmt.setString(2, bean.getPassword());
@@ -89,8 +88,19 @@ public class MemberDaoImpl implements CommonDAO{
 
 	@Override
 	public Object getElementById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		MemberBean bean = new MemberBean();
+		String sql = "select * from member where id = ?";
+		try {
+			connector.prepareStatement(sql).setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setAddr(rs.getString(""));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return bean;
 	}
 
 	@Override
@@ -102,9 +112,10 @@ public class MemberDaoImpl implements CommonDAO{
 	@Override
 	public List<Object> list() {
 		List<Object> list = new ArrayList<Object>();
+		MemberBean bean = new MemberBean();
 		String sql = "select * from member";
         try {
-            stmt = conn.createStatement();
+            stmt = connector.createStatement();
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 bean.setId(rs.getString("MEMBERID"));
@@ -123,7 +134,7 @@ public class MemberDaoImpl implements CommonDAO{
             try {
                 rs.close();
                 stmt.close();
-                conn.close();
+                connector.close();
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

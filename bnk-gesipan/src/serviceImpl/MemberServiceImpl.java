@@ -61,11 +61,20 @@ public class MemberServiceImpl implements MemberService {
 		return 0;
 	}
 	@Override
-	public String login(String id, String password) {
+	public String login(String loginId, String loginPass) {
 		String msg = "";
 		
-		bean = (MemberBean) MemberDaoImpl.getInstance().getElementById(id);
+		bean = (MemberBean) MemberDaoImpl.getInstance().getElementById(loginId);
 		
+		if (bean.getId().equals(loginId) && 
+				bean.getPassword().equals(loginPass)) {
+			msg = "환영합니다.";
+		} else if(bean.getId().equals(loginId)&&
+				!bean.getPassword().equals(loginPass)){
+			msg = "비밀번호가 일치하지 않습니다.";
+		}else{
+			msg = "등록된 아이디가 아닙니다.";
+		}
 		
 		return msg;
 	}

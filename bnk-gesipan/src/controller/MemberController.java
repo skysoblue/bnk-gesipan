@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bean.MemberBean;
 import factory.CommandFactory;
@@ -94,12 +95,9 @@ public class MemberController extends HttpServlet {
             String msg = MemberServiceImpl.getInstance().login(loginId, loginPass);
             
             if(msg.equals("환영합니다..")){
-                System.out.println("로그인 성공시 : "+bean.getId());
-                request.setAttribute("id", bean.getId());
-                request.setAttribute("password", bean.getPassword());
-                request.setAttribute("name", bean.getName());
-                request.setAttribute("age", bean.getAge());
-                request.setAttribute("address", bean.getAddr());
+               HttpSession session = request.getSession();
+               session.setAttribute("loginId", loginId);
+               request.setAttribute("loginId", loginId);
                 dispatcherServlet(request,response,command);
                 break;
             }else{
