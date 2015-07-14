@@ -66,6 +66,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		bean = (MemberBean) MemberDaoImpl.getInstance().getElementById(id);
 		
+		
 		return msg;
 	}
 }

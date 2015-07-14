@@ -1,8 +1,6 @@
 package controller;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -13,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bean.MemberBean;
-import service.MemberService;
+import factory.CommandFactory;
+import factory.Command;
 import serviceImpl.MemberServiceImpl;
  
 
@@ -32,44 +31,48 @@ public class MemberController extends HttpServlet {
     Map<String,Object> map = new HashMap<String,Object>();
     MemberBean bean = new MemberBean();
     
-   
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        String path = request.getServletPath();
-        switch (path) {
-        case "/member/joinForm.do" :
-            RequestDispatcher dispatcher2 
-            = request.getRequestDispatcher("/view/joinForm.jsp");
-            dispatcher2.forward(request, response);
-            break;
-        case "/member/searchIdForm.do" :
-            RequestDispatcher dispatcher3 
-            = request.getRequestDispatcher("/view/searchIdForm.jsp");
-            dispatcher3.forward(request, response);
-            break;
-        case "/member/searchPassForm.do": 
-            RequestDispatcher dispatcher4 
-            = request.getRequestDispatcher("/view/searchPassForm.jsp");
-            dispatcher4.forward(request, response);
-            break;
-        case "/member/searchAllMembers.do": 
-            request.setAttribute("memberList", MemberServiceImpl.getInstance().memberList());
-            RequestDispatcher dispatcher5 
-                = request.getRequestDispatcher("/view/memberList.jsp");
-            dispatcher5.forward(request, response);
-            break;
-        default:
-            break;
-        }
+    CommandFactory factory = new CommandFactory();
+    String view;
+    Command command;
+    
+    
+    public void init(HttpServletRequest request, HttpServletResponse response)
+    		throws ServletException, IOException{
+    	request.setCharacterEncoding("UTF-8");
+    	String directory = request.getServletPath().split("/")[1];
+    	String extention = request.getServletPath().split("/")[2];
+    	String action = extention.substring(0, extention.indexOf("."));
+    	System.out.println("디렉토리 :" + directory);
+    	System.out.println("명령어 : " + action);
+    	String pageNo = request.getParameter("pageNo");
+    	String keyField = request.getParameter("keyField");
+    	String keyword = request.getParameter("keyword");
+    	if(action==null){action="frame";}
+    	if(pageNo==null){pageNo="1";}
+    	if(keyField==null){keyField="NONE";}
+    	if(keyword==null){keyword="NONE";}
+    	command = factory.createCommand(directory,action,pageNo,keyField,keyword);
     }
     
-    protected void doPost(HttpServletRequest request,
-        HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        String path = request.getServletPath();
-        switch (path) {
-        case "/member/join.do" : 
+    protected void service(HttpServletRequest request, 
+    		HttpServletResponse response)
+            throws ServletException, IOException {
+    	init(request,response);
+        switch (command.getAction()) {
+        case "joinForm" :
+        	dispatcherServlet(request,response,command);
+            break;
+        case "searchIdForm" :
+        	dispatcherServlet(request,response,command);
+            break;
+        case "searchPassForm": 
+        	dispatcherServlet(request,response,command);
+            break;
+        case "searchAllMembers": 
+            request.setAttribute("memberList", MemberServiceImpl.getInstance().memberList());
+            dispatcherServlet(request,response,command);
+            break;
+        case "join" : 
             String name = request.getParameter("name");
             String id = request.getParameter("id");
             String password = request.getParameter("password");
@@ -82,15 +85,13 @@ public class MemberController extends HttpServlet {
             bean.setAge(age);
             
             MemberServiceImpl.getInstance().join(bean);
-            RequestDispatcher dispatcher 
-                = request.getRequestDispatcher("/view/main.jsp");
-            dispatcher.forward(request, response);
+            dispatcherServlet(request,response,command);
             break;
-        case "/member/login.do" : 
+        case "login" : 
             
-            String id2 = request.getParameter("id");
-            String pass = request.getParameter("password");
-            String msg = MemberServiceImpl.getInstance().login(id2, pass);
+            String loginId = request.getParameter("id");
+            String loginPass = request.getParameter("password");
+            String msg = MemberServiceImpl.getInstance().login(loginId, loginPass);
             
             if(msg.equals("환영합니다..")){
                 System.out.println("로그인 성공시 : "+bean.getId());
@@ -99,20 +100,31 @@ public class MemberController extends HttpServlet {
                 request.setAttribute("name", bean.getName());
                 request.setAttribute("age", bean.getAge());
                 request.setAttribute("address", bean.getAddr());
-                RequestDispatcher dispatcher2 
-                    = request.getRequestDispatcher("/view/member.jsp");
-                dispatcher2.forward(request, response);
+                dispatcherServlet(request,response,command);
                 break;
             }else{
                 request.setAttribute("msg", msg);
-                RequestDispatcher dispatcher2 
-                    = request.getRequestDispatcher("/view/loginFail.jsp");
-                dispatcher2.forward(request, response);
+                dispatcherServlet(request,response,command);
                 break;
-            }
-            
-        
-        default: break;
+            }    
+        default:
+            break;
         }
+    }
+    public void dispatcherServlet(HttpServletRequest request, 
+    		HttpServletResponse response,
+    		Command commmand) throws ServletException, IOException{
+    	RequestDispatcher dis = request.getRequestDispatcher(
+    			"/views/"+command.getDirectory()
+    			+"/"+command.getView()+".jsp");
+		dis.forward(request, response);
+    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	service(request,response);
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	service(request,response);
     }
 }

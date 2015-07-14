@@ -28,7 +28,7 @@
                     <div style="width:200px; margin : 0 auto;">
                     <img src="${context}/image/btnOk.jpg" 
                             style="cursor: pointer;margin:0 auto" 
-                    alt="" onclick="return login()"/>
+                    alt="" onclick="return member.login()"/>
                      <img src="${context}/image/btnNo.jpg" 
                             style="cursor: pointer;" 
                     alt="" class="popupClose"/>
@@ -49,4 +49,4 @@
                 비밀번호 찾기</a>
         </span>
     </div>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/member.js"></script>
+    <script type="text/javascript" src="${context}/js/member.js"></script>
