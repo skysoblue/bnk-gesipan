@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.BookBean;
-import dao.CommonDAO;
+import dao.BookDao;
+import dao.CommonDao;
 import util.DBmanager;
 
-public class BookDaoImpl implements CommonDAO{
+public class BookDaoImpl implements BookDao{
 	Connection connector;
 	PreparedStatement pstmt;
 	Statement stmt;
@@ -52,7 +53,7 @@ public class BookDaoImpl implements CommonDAO{
 	}
 
 	@Override
-	public Object getElementById(String id) {
+	public BookBean getElementById(String id) {
 		BookBean bean = new BookBean();
 		String sql = "select * from book "
 				+ "where mem_id = ";
@@ -98,6 +99,19 @@ public class BookDaoImpl implements CommonDAO{
 	public int delete(String id) {
 		int result = 0;
 		return result;
+	}
+
+
+	@Override
+	public int insert(BookBean obj) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(BookBean obj) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

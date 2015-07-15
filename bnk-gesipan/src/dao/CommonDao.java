@@ -2,7 +2,7 @@ package dao;
 
 import java.util.List;
 
-public interface CommonDAO {
+public interface CommonDao {
 	/*
 	 * 추가 CREATE
 	 * */

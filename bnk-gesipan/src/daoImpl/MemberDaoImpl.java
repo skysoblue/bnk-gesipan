@@ -13,10 +13,11 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import bean.MemberBean;
-import dao.CommonDAO;
+import dao.CommonDao;
+import dao.MemberDao;
 import util.DBmanager;
 
-public class MemberDaoImpl implements CommonDAO{
+public class MemberDaoImpl implements MemberDao{
 	Connection connector;
     PreparedStatement pstmt;
     Statement stmt;
@@ -52,9 +53,9 @@ public class MemberDaoImpl implements CommonDAO{
 
 
 	@Override
-	public int insert(Object obj) {
+	public int insert(MemberBean bean) {
 		int result = 0;
-		MemberBean bean = new MemberBean();
+		 
         String sql = 
            "insert into member(MEMBERID,PASSWORD,NAME,EMAIL,AGE)"
                 +" values( ? , ? , ? , ? , ? )";
@@ -82,16 +83,24 @@ public class MemberDaoImpl implements CommonDAO{
 
 	@Override
 	public int count() {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		String sql = "select * from member";
+		try {
+			rs = connector.createStatement().executeQuery(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
-	public Object getElementById(String id) {
+	public MemberBean getElementById(String id) {
 		MemberBean bean = new MemberBean();
 		String sql = "select * from member where id = ?";
 		try {
-			connector.prepareStatement(sql).setString(1, id);
+			pstmt = connector.prepareStatement(sql);
+			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				bean.setAddr(rs.getString(""));
@@ -144,18 +153,32 @@ public class MemberDaoImpl implements CommonDAO{
         return list;
 	}
 
-	@Override
-	public int update(Object obj) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public int delete(String id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
+
+	@Override
+	public int update(MemberBean obj) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int insert(Object obj) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(Object obj) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
  
   
 }

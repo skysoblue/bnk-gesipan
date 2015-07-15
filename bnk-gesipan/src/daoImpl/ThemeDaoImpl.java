@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import bean.ThemeBean;
-import dao.CommonDAO;
+import dao.CommonDao;
 
-public class ThemeDaoImpl implements CommonDAO {
+public class ThemeDaoImpl implements CommonDao {
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	Statement stmt = null;

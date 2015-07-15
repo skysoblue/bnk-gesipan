@@ -12,10 +12,12 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import bean.AddrBean;
-import dao.CommonDAO;
+import bean.ArticleBean;
+import dao.ArticleDao;
+import dao.CommonDao;
 import util.DBmanager;
 
-public class ArticleDaoImpl implements CommonDAO{
+public class ArticleDaoImpl implements ArticleDao{
 	Connection conn = null;
     PreparedStatement pstmt = null;
     Statement stmt = null;
@@ -94,8 +96,8 @@ public class ArticleDaoImpl implements CommonDAO{
 	}
 
 	@Override
-	public Object getElementById(String id) {
-		Object obj = null;
+	public ArticleBean getElementById(String id) {
+		ArticleBean bean = null;
 		 try {
 	            pstmt = conn.prepareStatement(
 	            "select * from GUESTBOOK where GUESTBOOK_ID = ? ");
@@ -103,13 +105,6 @@ public class ArticleDaoImpl implements CommonDAO{
 	            rs = pstmt.executeQuery();
 	            
 	            if (rs.next()) {
-	                
-	                bean.setId(rs.getInt("GUESTBOOK_ID"));
-	                bean.setRegister(rs.getTimestamp("REGISTER"));
-	                bean.setName(rs.getString("NAME"));
-	                bean.setEmail(rs.getString("EMAIL"));
-	                bean.setPassword(rs.getString("PASSWORD"));
-	                
 	            }
 	          
 	        } catch(Exception ex) {
@@ -119,7 +114,7 @@ public class ArticleDaoImpl implements CommonDAO{
 	            if (pstmt != null) try { pstmt.close(); } catch(Exception ex) {}
 	            if (conn != null) try { conn.close(); } catch(Exception ex) {}
 	        }
-		return obj;
+		return bean;
 	}
 
 	@Override
@@ -198,6 +193,19 @@ public class ArticleDaoImpl implements CommonDAO{
 	            if (conn != null) try { conn.close(); } catch(Exception ex) {}
 	        }
 		return result;
+	}
+
+
+	@Override
+	public int insert(ArticleBean bean) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(ArticleBean bean) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
