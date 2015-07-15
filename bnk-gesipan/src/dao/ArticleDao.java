@@ -16,6 +16,7 @@ public interface ArticleDao{
 	
 	public List<ArticleBean> getElementsByName(Command command);
 	public int count(Command command);
+	public int searchCount(Command command);
 	public List<ArticleBean> list(Command command);
 	public ArticleBean getElementById(Command command);
 	

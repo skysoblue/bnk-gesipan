@@ -14,6 +14,7 @@ public interface MemberDao{
 	
 	public List<MemberBean> getElementsByName(Command command);
 	public int count(Command command);
+	public int searchCount(Command command);
 	public List<MemberBean> list(Command command);
 	public MemberBean getElementById(Command command);
 	

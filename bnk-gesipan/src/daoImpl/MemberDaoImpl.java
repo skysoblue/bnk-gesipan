@@ -52,7 +52,7 @@ public class MemberDaoImpl implements MemberDao{
         connector = ds.getConnection();
         return connector;
     }
-/*===== executeQuery =====*/    
+/*===== executeUpdate =====*/    
 
 	@Override
 	public int insert(MemberBean bean) {
@@ -73,24 +73,49 @@ public class MemberDaoImpl implements MemberDao{
             result = pstmt.executeUpdate();
         }catch(Exception ex){
             ex.printStackTrace();
-            System.out.println("MemberDAO 에서 에러가 발생 !!");
+            System.out.println("MEMEBERDAO-INSERT-ERROR");
         }
         return result;
 	}
 	@Override
 	public int delete(MemberBean bean) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		String sql = "delete from member where mem_id = ?";
+		try {
+			pstmt = connector.prepareStatement(sql);
+			pstmt.setString(1, bean.getMemId());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("MEMEBERDAO-DELETE-ERROR");
+		}
+		
+		return result;
 	}
 
 
 	@Override
 	public int update(MemberBean bean) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		String sql = "update member set "
+				+ "password = ?"
+				+ "email = ?";
+		try {
+			pstmt = connector.prepareStatement(sql);
+			pstmt.setString(1, bean.getPassword());
+			pstmt.setString(2, bean.getEmail());
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			System.out.println("MEMEBERDAO-UPDATE-ERROR");
+		}
+		return result;
 	}
 
-/*===== executeUpdate =====*/	
+/*===== executeQuery =====*/	
 
 	@Override
 	public int count(Command command) {
@@ -101,8 +126,9 @@ public class MemberDaoImpl implements MemberDao{
 			result = rs.getInt("count");
 					
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+			System.out.println("MEMEBERDAO-COUNT-ERROR");
 		}
 		return result;
 	}
@@ -127,6 +153,7 @@ public class MemberDaoImpl implements MemberDao{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("MEMEBERDAO-getElementById-ERROR");
 		}
 		return bean;
 	}
@@ -134,15 +161,33 @@ public class MemberDaoImpl implements MemberDao{
 	@Override
 	public List<MemberBean> getElementsByName(Command command) {
 		List<MemberBean> list = new ArrayList<MemberBean>();
-		String sql = "select * from member where ? = ?";
+		MemberBean bean = new MemberBean();
+		String sql = "select * "
+				+ "\n from (select rownum as seq, m.* from member m"
+				+ "\n where ? like like '%?%')"
+				+ "\n where seq between ? and ?"
+				+ "\n order by reg_date desc";
 		try {
 			pstmt  = connector.prepareStatement(sql);
 			pstmt.setString(1, command.getKeyField());
 			pstmt.setString(2, command.getKeyword());
+			pstmt.setInt(3, command.getStart());
+			pstmt.setInt(4, command.getEnd());
 			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setMemId(rs.getString("MEM_ID"));
+				bean.setAddrSeq(rs.getInt("ADDR_SEQ"));
+				bean.setName(rs.getString("NAME"));
+				bean.setAge(rs.getString("AGE"));
+				bean.setPassword(rs.getString("PASSWORD"));;
+				bean.setEmail(rs.getString("EMAIL"));
+				bean.setIsAdmin(rs.getInt("IS_ADMIN"));
+				list.add(bean);
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("MEMEBERDAO-getElementsByName-ERROR");
 		}
 		return list;
 	}
@@ -151,18 +196,28 @@ public class MemberDaoImpl implements MemberDao{
 	public List<MemberBean> list(Command command) {
 		List<MemberBean> list = new ArrayList<MemberBean>();
 		MemberBean bean = new MemberBean();
-		String sql = "select * from member";
+		String sql = "select * "
+				+ "\n(select rownum as seq, m.* from member m)"
+				+ "\n where seq between ? and ?"
+				+ "\n order by reg_date desc";
         try {
-            stmt = connector.createStatement();
-            rs = stmt.executeQuery(sql);
+            pstmt = connector.prepareStatement(sql);
+            pstmt.setInt(1, command.getStart());
+            pstmt.setInt(2, command.getEnd());
+            rs = pstmt.executeQuery();
             while (rs.next()) {
-               
- 
+            	bean.setMemId(rs.getString("MEM_ID"));
+                bean.setAddrSeq(rs.getInt("ADDR_SEQ"));
+                bean.setName(rs.getString("NAME"));
+                bean.setAge(rs.getString("AGE"));
+                bean.setPassword(rs.getString("PASSWORD"));
+                bean.setEmail(rs.getString("EMAIL"));
+                bean.setIsAdmin(rs.getInt("IS_ADMIN"));
                 list.add(bean);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            System.out.println("MEMEBERDAO-list-ERROR");
         } finally {
  
             try {
@@ -170,12 +225,31 @@ public class MemberDaoImpl implements MemberDao{
                 stmt.close();
                 connector.close();
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
  
         }
         return list;
+	}
+	@Override
+	public int searchCount(Command command) {
+		int result = 0;
+		String sql = "select count(*) COUNT "
+				+ "\n from member"
+				+ "\n where ? like '%?%'";
+		try {
+			pstmt = connector.prepareStatement(sql);
+			pstmt.setString(1, command.getKeyField());
+			pstmt.setString(2, command.getKeyword());
+			rs = pstmt.executeQuery();
+			result = rs.getInt("COUNT");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("MEMEBERDAO-searchCount-ERROR");
+		}
+		return result;
 	}
 
 

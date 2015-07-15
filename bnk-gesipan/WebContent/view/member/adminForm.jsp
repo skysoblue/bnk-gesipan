@@ -14,7 +14,7 @@
             <tr>
                 <td>전체회원 목록보기 </td>
                 <td>
-                    <!-- <input type="text" id="id" name="id" placeholder="ID 입력" /> -->
+                    <jsp:include page="memberList.jsp"></jsp:include>
                 </td>
             </tr>
             <tr>

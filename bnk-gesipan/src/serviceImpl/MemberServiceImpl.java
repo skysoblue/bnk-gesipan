@@ -34,25 +34,21 @@ public class MemberServiceImpl implements MemberService {
     }
     @Override
 	public int updateMember(MemberBean bean) {
-		// TODO Auto-generated method stub
-		return 0;
+		return MemberDaoImpl.getInstance().update(bean);
 	}
 	@Override
 	public int deleteMember(MemberBean bean) {
-		// TODO Auto-generated method stub
-		return 0;
+		return MemberDaoImpl.getInstance().delete(bean);
 	}
    
 /*===== executeQuery =====*/	
 	@Override
 	public MemberBean memberDetail(Command command) {
-		// TODO Auto-generated method stub
-		return null;
+		return MemberDaoImpl.getInstance().getElementById(command);
 	}
 	@Override
 	public List<MemberBean> searchByKeyword(Command command) {
-		// TODO Auto-generated method stub
-		return null;
+		return MemberDaoImpl.getInstance().getElementsByName(command);
 	}
 	
 	@Override
@@ -79,7 +75,6 @@ public class MemberServiceImpl implements MemberService {
     }
 	@Override
 	public int memberCount(Command command) {
-		// TODO Auto-generated method stub
-		return 0;
+		return MemberDaoImpl.getInstance().count(command);
 	}
 }

@@ -24,6 +24,7 @@ public interface CommonDao {
 	 * 요소의 갯수 
 	 * */
 	public int count(Command command);
+	public int searchCount(Command command);
 	/*
 	 * ID 로 중복값 없이 추출
 	 * */

@@ -15,7 +15,7 @@
         </tr>
         <c:forEach var="member" items="${memberList}" varStatus="status">
             <tr style="align:center;border: 1px solid black;">
-                <td>${member.id}</td>
+                <td>${member.memId}</td>
                 <td>${member.name }</td>
                 <td>${member.age }</td>
                 <td>${member.email }</td>

@@ -63,6 +63,7 @@ create table Member(
 	password varchar2(100) default 'null', -- 비번
 	email	varchar2(100), -- 이메일
 	is_admin number default 0, -- 관리자 1 일반유저 0
+	reg_date date default sysdate,
 	constraint member_fk_addr foreign key(addr_seq)
 		references Addr(addr_seq) on delete cascade  
 );

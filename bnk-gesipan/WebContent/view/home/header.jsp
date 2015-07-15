@@ -11,7 +11,7 @@
 	<div id="login">
 		<a href="#joinForm" id="aJoin" class="popupOpen">회원가입</a> | 
 		<a href="#loginForm" id="aLogin" class="popupOpen">로그인</a> | 
-		<a href="${context}/home/siteMap.do">사이트맵</a>
+		<a href="${context}/member/adminForm.do">관리자</a>
 	</div>
 	<div class="clear"></div>
 	<nav id="topMenu">

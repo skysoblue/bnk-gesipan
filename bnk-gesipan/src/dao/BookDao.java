@@ -17,6 +17,7 @@ public interface BookDao{
 	
 	public List<BookBean> getElementsByName(Command command);
 	public int count(Command command);
+	public int searchCount(Command command);
 	public BookBean getElementById(Command command);
 	public List<BookBean> list(Command command);
 	

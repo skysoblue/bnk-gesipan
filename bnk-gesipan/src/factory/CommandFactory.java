@@ -1,16 +1,14 @@
 package factory;
 
 public class CommandFactory {
-	Command command;
-	String directory, action, keyword, keyField, view;
 	
 	public  Command createCommand(
 			String directory,
-			String action, 
-			String keyword,
+			String action,
+			String pageNo,
 			String keyField,
-			String view){
+			String keyword){
 		
-		return new Command(directory, action, keyword,keyField,view);
+		return new Command(directory, action,pageNo, keyField, keyword);
 	}
 }

@@ -102,4 +102,10 @@ public class BookDaoImpl implements BookDao{
 		return list;
 	}
 
+	@Override
+	public int searchCount(Command command) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

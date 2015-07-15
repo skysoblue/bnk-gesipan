@@ -376,6 +376,11 @@ public class ThemeDaoImpl implements ThemeDao {
 		}
 		return list;
 	}
+	@Override
+	public int searchCount(Command command) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 	
 

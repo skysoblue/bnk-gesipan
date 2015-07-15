@@ -21,7 +21,7 @@ import serviceImpl.MemberServiceImpl;
  * @ Author : itb-1;
  * @ Story : 회원관리 컨트롤러;
  */
-@WebServlet({"/member/join.do","/member/login.do",
+@WebServlet({"/member/join.do","/member/login.do","/member/adminForm.do",
     "/member/searchIdForm.do","/member/searchPassForm.do",
     "/member/searchAllMembers.do"})
 public class MemberController extends HttpServlet {
@@ -33,7 +33,7 @@ public class MemberController extends HttpServlet {
     CommandFactory factory = new CommandFactory();
     String view;
     Command command;
-    
+    HttpSession session;
     
     public void init(HttpServletRequest request, HttpServletResponse response)
     		throws ServletException, IOException{
@@ -41,11 +41,12 @@ public class MemberController extends HttpServlet {
     	String directory = request.getServletPath().split("/")[1];
     	String extention = request.getServletPath().split("/")[2];
     	String action = extention.substring(0, extention.indexOf("."));
-    	System.out.println("디렉토리 :" + directory);
-    	System.out.println("명령어 : " + action);
+    	System.out.println("directory 디렉토리 :" + directory);
+    	System.out.println("action 명령어 : " + action);
     	String pageNo = request.getParameter("pageNo");
     	String keyField = request.getParameter("keyField");
     	String keyword = request.getParameter("keyword");
+    	
     	if(action==null){action="frame";}
     	if(pageNo==null){pageNo="1";}
     	if(keyField==null){keyField="null";}
@@ -61,6 +62,12 @@ public class MemberController extends HttpServlet {
         case "joinForm" :
         	dispatcherServlet(request,response,command);
             break;
+        case "adminForm" :
+        	request.setAttribute("memberList", 
+        			MemberServiceImpl.getInstance().memberList(command));
+        	
+        	dispatcherServlet(request,response,command);
+            break;    
         case "searchIdForm" :
         	dispatcherServlet(request,response,command);
             break;
@@ -95,7 +102,7 @@ public class MemberController extends HttpServlet {
             String msg = MemberServiceImpl.getInstance().login(command);
             
             if(msg.equals("환영합니다..")){
-               HttpSession session = request.getSession();
+            	HttpSession session = request.getSession();
                session.setAttribute("loginId", loginId);
                request.setAttribute("loginId", loginId);
                 dispatcherServlet(request,response,command);
@@ -104,17 +111,26 @@ public class MemberController extends HttpServlet {
                 request.setAttribute("msg", msg);
                 dispatcherServlet(request,response,command);
                 break;
-            }    
+            } 
+        case "loginCheck": 
+        	session = request.getSession();
+        	String checkSession = (String) session.getAttribute("loginId");
+            boolean loginOk = (checkSession != null) ? true : false;
+            request.setAttribute("loginOk", loginOk);
+        	break;
+        case "logout" :
+        	session = request.getSession();
+        	session.invalidate();
+        	
         default:
             break;
         }
     }
     public void dispatcherServlet(HttpServletRequest request, 
     		HttpServletResponse response,
-    		Command commmand) throws ServletException, IOException{
-    	RequestDispatcher dis = request.getRequestDispatcher(
-    			"/views/"+command.getDirectory()
-    			+"/"+command.getView()+".jsp");
+    		Command command) throws ServletException, IOException{
+    	System.out.println("뷰 :" + command.getView());
+    	RequestDispatcher dis = request.getRequestDispatcher(command.getView());
 		dis.forward(request, response);
     }
     @Override
