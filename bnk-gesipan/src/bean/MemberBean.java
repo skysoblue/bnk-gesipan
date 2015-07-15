@@ -1,35 +1,36 @@
 package bean;
 
 public class MemberBean {
-	private String name; // 이름
-    private String addr; // 주소
-    private String age; // 나이
-    private String id; // ID
-    private String password; // 비번
-    private String email; // 이메일
+	private String memId;
+	private int addrSeq;
+	private String name;
+	private String age;
+	private String password;
+	private String email;
+	private int isAdmin; // 관리자 1 일반유저 0, 디폴트 0
+	public String getMemId() {
+		return memId;
+	}
+	public void setMemId(String memId) {
+		this.memId = memId;
+	}
+	public int getAddrSeq() {
+		return addrSeq;
+	}
+	public void setAddrSeq(int addrSeq) {
+		this.addrSeq = addrSeq;
+	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getAddr() {
-		return addr;
-	}
-	public void setAddr(String addr) {
-		this.addr = addr;
-	}
 	public String getAge() {
 		return age;
 	}
 	public void setAge(String age) {
 		this.age = age;
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
 	}
 	public String getPassword() {
 		return password;
@@ -43,6 +44,14 @@ public class MemberBean {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public int getIsAdmin() {
+		return isAdmin;
+	}
+	public void setIsAdmin(int isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+	
+	
     
     
 }

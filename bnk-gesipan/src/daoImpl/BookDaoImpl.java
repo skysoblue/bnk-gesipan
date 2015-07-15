@@ -11,6 +11,7 @@ import java.util.List;
 import bean.BookBean;
 import dao.BookDao;
 import dao.CommonDao;
+import factory.Command;
 import util.DBmanager;
 
 public class BookDaoImpl implements BookDao{
@@ -19,25 +20,37 @@ public class BookDaoImpl implements BookDao{
 	Statement stmt;
 	ResultSet rs;
 	BookBean bean = new BookBean();
-	private static BookDaoImpl bookDao = new BookDaoImpl();
+	
 	
 	public BookDaoImpl() {
 		connector = DBmanager.getConnection();
 	}
-	
+	private static BookDaoImpl bookDao = new BookDaoImpl();
 	public static BookDaoImpl getConnection() {
 		return bookDao;
 	}
 	
-	
+/*===== executeUpdate =====*/	
 	@Override
-	public int insert(Object obj) {
+	public int insert(BookBean bean) {
+		int result = 0;
+		return result;
+	}
+	@Override
+	public int delete(BookBean bean) {
 		int result = 0;
 		return result;
 	}
 
 	@Override
-	public int count() {
+	public int update(BookBean bean) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+/*===== executeQuery =====*/	
+	@Override
+	public int count(Command command) {
 		int result = 0;
 		String sql = "select count(*) as count from book";
 		try {
@@ -53,7 +66,7 @@ public class BookDaoImpl implements BookDao{
 	}
 
 	@Override
-	public BookBean getElementById(String id) {
+	public BookBean getElementById(Command command) {
 		BookBean bean = new BookBean();
 		String sql = "select * from book "
 				+ "where mem_id = ";
@@ -61,14 +74,14 @@ public class BookDaoImpl implements BookDao{
 	}
 
 	@Override
-	public List<Object> getElementsByName(String name) {
-		List<Object> list = new ArrayList<Object>();
+	public List<BookBean> getElementsByName(Command command) {
+		List<BookBean> list = new ArrayList<BookBean>();
 		return list;
 	}
 
 	@Override
-	public List<Object> list() {
-		List<Object> list = new ArrayList<Object>();
+	public List<BookBean> list(Command command) {
+		List<BookBean> list = new ArrayList<BookBean>();
 		String sql = "select * from  book";
 		try {
 			rs = connector.createStatement().executeQuery(sql);
@@ -87,31 +100,6 @@ public class BookDaoImpl implements BookDao{
 			System.out.println("BookDaoImpl-list() 에러");
 		}
 		return list;
-	}
-
-	@Override
-	public int update(Object obj) {
-		int result = 0;
-		return result;
-	}
-
-	@Override
-	public int delete(String id) {
-		int result = 0;
-		return result;
-	}
-
-
-	@Override
-	public int insert(BookBean obj) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int update(BookBean obj) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

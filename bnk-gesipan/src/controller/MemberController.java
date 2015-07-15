@@ -16,8 +16,6 @@ import factory.CommandFactory;
 import factory.Command;
 import serviceImpl.MemberServiceImpl;
  
-
- 
 /**
  * @ Date : 2015.06;
  * @ Author : itb-1;
@@ -50,8 +48,8 @@ public class MemberController extends HttpServlet {
     	String keyword = request.getParameter("keyword");
     	if(action==null){action="frame";}
     	if(pageNo==null){pageNo="1";}
-    	if(keyField==null){keyField="NONE";}
-    	if(keyword==null){keyword="NONE";}
+    	if(keyField==null){keyField="null";}
+    	if(keyword==null){keyword="null";}
     	command = factory.createCommand(directory,action,pageNo,keyField,keyword);
     }
     
@@ -70,7 +68,7 @@ public class MemberController extends HttpServlet {
         	dispatcherServlet(request,response,command);
             break;
         case "searchAllMembers": 
-            request.setAttribute("memberList", MemberServiceImpl.getInstance().memberList());
+            request.setAttribute("memberList", MemberServiceImpl.getInstance().memberList(command));
             dispatcherServlet(request,response,command);
             break;
         case "join" : 
@@ -81,18 +79,20 @@ public class MemberController extends HttpServlet {
             String email = request.getParameter("email");
             bean.setName(name);
             bean.setEmail(email);
-            bean.setId(id);
+            bean.setMemId(id);
             bean.setPassword(password);
             bean.setAge(age);
             
-            MemberServiceImpl.getInstance().join(bean);
+            MemberServiceImpl.getInstance().joinMember(bean);
             dispatcherServlet(request,response,command);
             break;
         case "login" : 
             
             String loginId = request.getParameter("id");
             String loginPass = request.getParameter("password");
-            String msg = MemberServiceImpl.getInstance().login(loginId, loginPass);
+            command.setKeyField(loginId);
+            command.setKeyword(loginPass);
+            String msg = MemberServiceImpl.getInstance().login(command);
             
             if(msg.equals("환영합니다..")){
                HttpSession session = request.getSession();

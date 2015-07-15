@@ -3,20 +3,20 @@ package dao;
 import java.util.List;
 
 import bean.ArticleBean;
+import factory.Command;
 
-public interface ArticleDao extends CommonDao{
-	@Override
-	int count();
-	@Override
-	int delete(String id);
-	@Override
-	ArticleBean getElementById(String id);
-	@Override
-	List<Object> getElementsByName(String name);
-	int insert(ArticleBean bean);
-	@Override
-	List<Object> list();
-	int update(ArticleBean bean);
+public interface ArticleDao{
+/*===== executeUpdate =====*/	
 	
+	public int insert(ArticleBean bean);
+	public int delete(ArticleBean bean);
+	public int update(ArticleBean bean);
+	
+/*===== executeQuery =====*/	
+	
+	public List<ArticleBean> getElementsByName(Command command);
+	public int count(Command command);
+	public List<ArticleBean> list(Command command);
+	public ArticleBean getElementById(Command command);
 	
 }

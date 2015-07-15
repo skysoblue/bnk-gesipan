@@ -14,16 +14,22 @@ import java.util.Map;
 
 import bean.ThemeBean;
 import dao.CommonDao;
+import dao.ThemeDao;
+import factory.Command;
 
-public class ThemeDaoImpl implements CommonDao {
+public class ThemeDaoImpl implements ThemeDao {
+/*===== Field =====*/	
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	ThemeBean bean = new ThemeBean();
+	
+/*===== Constructor ====*/	
+	
+/*===== executeUpdate =====*/	
 
 	@Override
-	public int insert(Object obj) {
+	public int insert(ThemeBean bean) {
 		int result = 0;
 		try {
 			conn.setAutoCommit(false);
@@ -100,9 +106,78 @@ public class ThemeDaoImpl implements CommonDao {
 		}
 		return result;
 	}
+	@Override
+	public int update(ThemeBean bean) {
+		int result = 0;
+		try {
+
+			pstmt = conn
+					.prepareStatement("update THEME_MESSAGE set NAME=?,EMAIL=?,IMAGE=?,TITLE=? "
+							+ "where THEME_MESSAGE_ID=?");
+			pstmt = conn.prepareStatement("update THEME_CONTENT set CONTENT=? "
+					+ "where THEME_MESSAGE_ID=?");
+
+			pstmt.setString(1, bean.getName());
+			pstmt.setString(2, bean.getEmail());
+			pstmt.setString(3, bean.getImage());
+			pstmt.setString(4, bean.getTitle());
+			pstmt.setInt(5, bean.getId());
+			pstmt.executeUpdate();
+
+			pstmt.setString(1, null);
+			pstmt.setInt(2, bean.getId());
+			pstmt.executeUpdate();
+
+			conn.commit();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+
+		}
+		return result;
+	}
 
 	@Override
-	public int count() {
+	public int delete(ThemeBean bean) {
+		int result = 0;
+		  Connection conn = null; 
+	        PreparedStatement pstmtMessage = null;
+	        PreparedStatement pstmtContent = null;
+	        
+	        try {
+	           
+	            conn.setAutoCommit(false);
+	            
+	            pstmtMessage = conn.prepareStatement(
+	                "delete from THEME_MESSAGE where THEME_MESSAGE_ID = ?");
+	            pstmtContent = conn.prepareStatement(
+	                "delete from THEME_CONTENT where THEME_MESSAGE_ID = ?");
+	            
+	            
+	            int updatedCount1 = pstmtMessage.executeUpdate();
+	            int updatedCount2 = pstmtContent.executeUpdate();
+	            
+	            if (updatedCount1 + updatedCount2 == 2) {
+	                conn.commit();
+	            } else {
+	                conn.rollback();
+	                
+	            }
+	        } catch(Exception ex) {
+	            try {
+	                conn.rollback();
+	            } catch(Exception ex1) {}
+	            
+	        } finally { 
+	           
+	        }
+	   
+		return result;
+	}
+/*===== executeQuery =====*/	
+	
+	@Override
+	public int count(Command command) {
 		Map<String, Object> valueMap = new HashMap<String, Object>();
 		int count = 0;
 		if (valueMap == null)
@@ -161,7 +236,7 @@ public class ThemeDaoImpl implements CommonDao {
 	}
 
 	@Override
-	public Object getElementById(String id) {
+	public ThemeBean getElementById(Command command) {
 		Object obj = null;
 		 Connection conn = null; 
 	        PreparedStatement pstmtMessage = null;
@@ -176,7 +251,6 @@ public class ThemeDaoImpl implements CommonDao {
 	            pstmtMessage = conn.prepareStatement(
 	                "select * from THEME_MESSAGE "+
 	                "where THEME_MESSAGE_ID = ?");
-	            pstmtMessage.setString(1, id); 
 	            rsMessage = pstmtMessage.executeQuery();
 	            if (rsMessage.next()) { 
 	                theme = new ThemeBean();
@@ -222,18 +296,18 @@ public class ThemeDaoImpl implements CommonDao {
 	        } finally { 
 	          
 	        }
-		return obj;
+		return null;
 	}
 
 	@Override
-	public List<Object> getElementsByName(String name) {
-		List<Object> list = new ArrayList<Object>();
+	public List<ThemeBean> getElementsByName(Command command) {
+		List<ThemeBean> list = new ArrayList<ThemeBean>();
 		return list;
 	}
 
 	@Override
-	public List<Object> list() {
-		List<Object> list = new ArrayList<Object>();
+	public List<ThemeBean> list(Command command) {
+		List<ThemeBean> list = new ArrayList<ThemeBean>();
 		Map<String, Object> valueMap = new HashMap<String, Object>();
 		int startRow=0,endRow=0;
 		if (valueMap == null)
@@ -303,75 +377,6 @@ public class ThemeDaoImpl implements CommonDao {
 		return list;
 	}
 
-	@Override
-	public int update(Object obj) {
-		int result = 0;
-		try {
-
-			pstmt = conn
-					.prepareStatement("update THEME_MESSAGE set NAME=?,EMAIL=?,IMAGE=?,TITLE=? "
-							+ "where THEME_MESSAGE_ID=?");
-			pstmt = conn.prepareStatement("update THEME_CONTENT set CONTENT=? "
-					+ "where THEME_MESSAGE_ID=?");
-
-			pstmt.setString(1, bean.getName());
-			pstmt.setString(2, bean.getEmail());
-			pstmt.setString(3, bean.getImage());
-			pstmt.setString(4, bean.getTitle());
-			pstmt.setInt(5, bean.getId());
-			pstmt.executeUpdate();
-
-			pstmt.setString(1, null);
-			pstmt.setInt(2, bean.getId());
-			pstmt.executeUpdate();
-
-			conn.commit();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-
-		}
-		return result;
-	}
-
-	@Override
-	public int delete(String id) {
-		int result = 0;
-		  Connection conn = null; 
-	        PreparedStatement pstmtMessage = null;
-	        PreparedStatement pstmtContent = null;
-	        
-	        try {
-	           
-	            conn.setAutoCommit(false);
-	            
-	            pstmtMessage = conn.prepareStatement(
-	                "delete from THEME_MESSAGE where THEME_MESSAGE_ID = ?");
-	            pstmtContent = conn.prepareStatement(
-	                "delete from THEME_CONTENT where THEME_MESSAGE_ID = ?");
-	            
-	            pstmtMessage.setString(1, id); 
-	            pstmtContent.setString(1, id); 
-	            
-	            int updatedCount1 = pstmtMessage.executeUpdate();
-	            int updatedCount2 = pstmtContent.executeUpdate();
-	            
-	            if (updatedCount1 + updatedCount2 == 2) {
-	                conn.commit();
-	            } else {
-	                conn.rollback();
-	                
-	            }
-	        } catch(Exception ex) {
-	            try {
-	                conn.rollback();
-	            } catch(Exception ex1) {}
-	            
-	        } finally { 
-	           
-	        }
-	   
-		return result;
-	}
+	
 
 }

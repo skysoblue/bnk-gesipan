@@ -15,29 +15,24 @@ import bean.AddrBean;
 import bean.ArticleBean;
 import dao.ArticleDao;
 import dao.CommonDao;
+import factory.Command;
 import util.DBmanager;
 
 public class ArticleDaoImpl implements ArticleDao{
+/*===== field =====*/	
 	Connection conn = null;
     PreparedStatement pstmt = null;
     Statement stmt = null;
     ResultSet rs = null;
-    
-    AddrBean bean = new AddrBean();
-    
-    private static ArticleDaoImpl bangDAO = new ArticleDaoImpl();
-    
+/*===== Singleton-Constructor =====*/
     private ArticleDaoImpl() {
         // 단위 테스트가 끝나고 프로젝트가 완성되면 걷어 낼 부분
         conn = DBmanager.getConnection();
     }
- 
+    private static ArticleDaoImpl bangDAO = new ArticleDaoImpl();
     public static ArticleDaoImpl getInstance() {
         return bangDAO;
     }
- 
-    // 현재는 작동하지 않지만 위 DBmanager 를 걷어내는 순간
-    // 작동함. 미리 설정함.
     public Connection getConnection() throws Exception {
         Connection conn = null;
         Context initContext = new InitialContext();
@@ -47,9 +42,9 @@ public class ArticleDaoImpl implements ArticleDao{
         return conn;
     }
 
-
+/*===== executeUpdate =====*/
 	@Override
-	public int insert(Object obj) {
+	public int insert(ArticleBean bean) {
 		int result = 0;
 		String sql = "insert into GUESTBOOK (REGISTER,NAME,EMAIL,PASSWORD,CONTENT) "+
 	            "values (?,?,?,?,?)";
@@ -57,12 +52,7 @@ public class ArticleDaoImpl implements ArticleDao{
 	           
 	            pstmt = conn.prepareStatement(sql);
 	            
-	            pstmt.setString(1, String.valueOf(bean.getRegister()));
-	            pstmt.setString(2, bean.getName());
-	            pstmt.setString(3, bean.getEmail());
-	            pstmt.setString(4, bean.getPassword());
-	            pstmt.setString(5,null);
-	            result =pstmt.executeUpdate();
+	         
 	              
 	        } catch(Exception ex) {
 	            ex.printStackTrace();
@@ -73,9 +63,45 @@ public class ArticleDaoImpl implements ArticleDao{
 	        }
 		return result;
 	}
+	@Override
+	public int update(ArticleBean bean) {
+		int result = 0;
+		 try {
+	            pstmt = conn.prepareStatement(
+	            "update GUESTBOOK set NAME=?,EMAIL=?,PASSWORD=?,CONTENT=? "+
+	            "where GUESTBOOK_ID = ?");
+	            
+	            
+	            pstmt.executeUpdate();
+	        } catch(Exception ex) {
+	            ex.printStackTrace();
+	        } finally {
+	            if (pstmt != null) try { pstmt.close(); } catch(Exception ex) {}
+	            if (conn != null) try { conn.close(); } catch(Exception ex) {}
+	        }
+		return result;
+	}
 
 	@Override
-	public int count() {
+	public int delete(ArticleBean bean) {
+		int result = 0;
+		 try {
+	            pstmt = conn.prepareStatement(
+	            "delete from GUESTBOOK where GUESTBOOK_ID = ?");
+	            pstmt.executeUpdate();
+	        } catch(Exception ex) {
+	            ex.printStackTrace();
+	        } finally {
+	            if (pstmt != null) try { pstmt.close(); } catch(Exception ex) {}
+	            if (conn != null) try { conn.close(); } catch(Exception ex) {}
+	        }
+		return result;
+	}
+	
+/*===== executeQuery =====*/	
+
+	@Override
+	public int count(Command command) {
 		int count = 0;
 		  try {
 	            stmt = conn.createStatement();
@@ -96,12 +122,11 @@ public class ArticleDaoImpl implements ArticleDao{
 	}
 
 	@Override
-	public ArticleBean getElementById(String id) {
+	public ArticleBean getElementById(Command command) {
 		ArticleBean bean = null;
 		 try {
 	            pstmt = conn.prepareStatement(
 	            "select * from GUESTBOOK where GUESTBOOK_ID = ? ");
-	            pstmt.setString(1, id);
 	            rs = pstmt.executeQuery();
 	            
 	            if (rs.next()) {
@@ -118,14 +143,14 @@ public class ArticleDaoImpl implements ArticleDao{
 	}
 
 	@Override
-	public List<Object> getElementsByName(String name) {
+	public List<ArticleBean> getElementsByName(Command command) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Object> list() {
-		List<Object> list = new ArrayList<Object>();
+	public List<ArticleBean> list(Command command) {
+		List<ArticleBean> list = new ArrayList<ArticleBean>();
 		int startRow = 0,endRow = 0;
 		int pageParam = endRow-startRow+1;
 		
@@ -154,58 +179,7 @@ public class ArticleDaoImpl implements ArticleDao{
 		return list;
 	}
 
-	@Override
-	public int update(Object obj) {
-		int result = 0;
-		 try {
-	            pstmt = conn.prepareStatement(
-	            "update GUESTBOOK set NAME=?,EMAIL=?,PASSWORD=?,CONTENT=? "+
-	            "where GUESTBOOK_ID = ?");
-	            
-	            pstmt.setString(1, bean.getName());
-	            pstmt.setString(2, bean.getEmail());
-	            pstmt.setString(3, bean.getPassword());
-	            pstmt.setString(4,null);
-	            pstmt.setString(5, String.valueOf(bean.getId()));
-	            
-	            pstmt.executeUpdate();
-	        } catch(Exception ex) {
-	            ex.printStackTrace();
-	        } finally {
-	            if (pstmt != null) try { pstmt.close(); } catch(Exception ex) {}
-	            if (conn != null) try { conn.close(); } catch(Exception ex) {}
-	        }
-		return result;
-	}
+	
 
-	@Override
-	public int delete(String id) {
-		int result = 0;
-		 try {
-	            pstmt = conn.prepareStatement(
-	            "delete from GUESTBOOK where GUESTBOOK_ID = ?");
-	            pstmt.setString(1, String.valueOf(bean.getId()));
-	            pstmt.executeUpdate();
-	        } catch(Exception ex) {
-	            ex.printStackTrace();
-	        } finally {
-	            if (pstmt != null) try { pstmt.close(); } catch(Exception ex) {}
-	            if (conn != null) try { conn.close(); } catch(Exception ex) {}
-	        }
-		return result;
-	}
-
-
-	@Override
-	public int insert(ArticleBean bean) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int update(ArticleBean bean) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 }

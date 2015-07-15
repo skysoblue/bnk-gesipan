@@ -15,9 +15,11 @@ import javax.sql.DataSource;
 import bean.MemberBean;
 import dao.CommonDao;
 import dao.MemberDao;
+import factory.Command;
 import util.DBmanager;
 
 public class MemberDaoImpl implements MemberDao{
+/*===== Field =====*/	
 	Connection connector;
     PreparedStatement pstmt;
     Statement stmt;
@@ -29,19 +31,19 @@ public class MemberDaoImpl implements MemberDao{
      * DBmanager 를 만들었고 당분간은 DBmanager 를 
      사용하다가 프로젝트가 완성되면 철거하는 방식으로 하겠습니다.
      */
-    private static MemberDaoImpl memberDAO = new MemberDaoImpl();
- 
+    
+/*===== Singleton-Constructor =====*/ 
     private MemberDaoImpl() {
         // 단위 테스트가 끝나고 프로젝트가 완성되면 걷어 낼 부분
         connector = DBmanager.getConnection();
     }
- 
+    private static MemberDaoImpl memberDAO = new MemberDaoImpl();
     public static MemberDaoImpl getInstance() {
         return memberDAO;
     }
- 
+/*===== DBCP connector =====*/    
     // 현재는 작동하지 않지만 위 DBmanager 를 걷어내는 순간
-    // 작동함. 미리 설정함.
+    // 작동함. 미리 설정함.	
     public Connection getConnection() throws Exception {
         Connection connector = null;
         Context initContext = new InitialContext();
@@ -50,29 +52,24 @@ public class MemberDaoImpl implements MemberDao{
         connector = ds.getConnection();
         return connector;
     }
-
+/*===== executeQuery =====*/    
 
 	@Override
 	public int insert(MemberBean bean) {
 		int result = 0;
-		 
         String sql = 
-           "insert into member(MEMBERID,PASSWORD,NAME,EMAIL,AGE)"
-                +" values( ? , ? , ? , ? , ? )";
+           "insert into member(MEM_ID,ADDR_SEQ,NAME,AGE,PASSWORD,EMAIL,IS_ADMIN)"
+                +" values( ? , ? , ? , ? , ? , ? , ? )";
         try{
-        	/*
-        	 * SQL 문이 insert 라면 물음표가 많을 것입니다.
-        	 * 이것을 리터럴 타입으로 만들려면 작업이 많을 것 같다.
-        	 * 그래서 pstmt 를 사용하자.
-        	 * 그런데 
-        	 * */ 
             pstmt = connector.prepareStatement(sql);
             
-            pstmt.setString(1, bean.getId());
-            pstmt.setString(2, bean.getPassword());
+            pstmt.setString(1, bean.getMemId());
+            pstmt.setInt(2, bean.getAddrSeq());
             pstmt.setString(3, bean.getName());
-            pstmt.setString(4, bean.getEmail());
-            pstmt.setString(5, bean.getAge());
+            pstmt.setString(4, bean.getAge());
+            pstmt.setString(5, bean.getPassword());
+            pstmt.setString(6, bean.getEmail());
+            pstmt.setInt(7, bean.getIsAdmin());
             result = pstmt.executeUpdate();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -80,13 +77,29 @@ public class MemberDaoImpl implements MemberDao{
         }
         return result;
 	}
+	@Override
+	public int delete(MemberBean bean) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 	@Override
-	public int count() {
+	public int update(MemberBean bean) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+/*===== executeUpdate =====*/	
+
+	@Override
+	public int count(Command command) {
 		int result = 0;
-		String sql = "select * from member";
+		String sql = "select count(*) count from member";
 		try {
 			rs = connector.createStatement().executeQuery(sql);
+			result = rs.getInt("count");
+					
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,15 +108,21 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public MemberBean getElementById(String id) {
+	public MemberBean getElementById(Command command) {
 		MemberBean bean = new MemberBean();
 		String sql = "select * from member where id = ?";
 		try {
 			pstmt = connector.prepareStatement(sql);
-			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				bean.setAddr(rs.getString(""));
+				bean.setMemId(rs.getString("MEM_ID"));
+				bean.setAddrSeq(rs.getInt("ADDR_SEQ"));
+				bean.setName(rs.getString("NAME"));
+				bean.setAge(rs.getString("AGE"));
+				bean.setPassword(rs.getString("PASSWORD"));
+				bean.setEmail(rs.getString("EAMIL"));
+				bean.setIsAdmin(rs.getInt("IS_ADMIN"));
+				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -113,25 +132,30 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public List<Object> getElementsByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<MemberBean> getElementsByName(Command command) {
+		List<MemberBean> list = new ArrayList<MemberBean>();
+		String sql = "select * from member where ? = ?";
+		try {
+			pstmt  = connector.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	@Override
-	public List<Object> list() {
-		List<Object> list = new ArrayList<Object>();
+	public List<MemberBean> list(Command command) {
+		List<MemberBean> list = new ArrayList<MemberBean>();
 		MemberBean bean = new MemberBean();
 		String sql = "select * from member";
         try {
             stmt = connector.createStatement();
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                bean.setId(rs.getString("MEMBERID"));
-                bean.setAge(rs.getString("AGE"));
-                bean.setPassword(rs.getString("PASSWORD"));
-                bean.setName(rs.getString("NAME"));
-                bean.setEmail(rs.getString("EMAIL"));
+               
  
                 list.add(bean);
             }
@@ -154,31 +178,6 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 
-	@Override
-	public int delete(String id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int update(MemberBean obj) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int insert(Object obj) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int update(Object obj) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
- 
+	
   
 }

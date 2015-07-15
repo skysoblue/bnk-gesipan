@@ -33,17 +33,7 @@ public class JdbcTest {
             stmt = conn.createStatement();
             rs = stmt.executeQuery("select * from member");
             while (rs.next()) {
-                bean.setId(rs.getString("MEMBERID"));
-                bean.setAge(rs.getString("AGE"));
-                bean.setPassword(rs.getString("PASSWORD"));
-                bean.setName(rs.getString("NAME"));
-                bean.setEmail(rs.getString("EMAIL"));
-                
-                System.out.print(bean.getId()+"\t");
-                System.out.print(bean.getAge()+"\t");
-                System.out.print(bean.getPassword()+"\t");
-                System.out.print(bean.getName()+"\t");
-                System.out.print(bean.getEmail()+"\t");
+               
                 System.out.println();
             }
         } catch (SQLException e) {

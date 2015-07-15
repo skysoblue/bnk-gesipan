@@ -2,16 +2,19 @@ package dao;
 import java.util.List;
 
 import bean.MemberBean;
-public interface MemberDao extends CommonDao{
-	@Override
-	int count();
-	@Override
-	int delete(String id);
-	MemberBean getElementById(String id);
-	@Override
-	List<Object> getElementsByName(String name);
-	int insert(MemberBean obj);
-	@Override
-	List<Object> list();
-	int update(MemberBean obj);
+import factory.Command;
+public interface MemberDao{
+/*===== executeUpdate =====*/		
+	
+	public int insert(MemberBean bean);
+	public int delete(MemberBean bean);
+	public int update(MemberBean bean);
+	
+/*===== executeQuery =====*/	
+	
+	public List<MemberBean> getElementsByName(Command command);
+	public int count(Command command);
+	public List<MemberBean> list(Command command);
+	public MemberBean getElementById(Command command);
+	
 }
