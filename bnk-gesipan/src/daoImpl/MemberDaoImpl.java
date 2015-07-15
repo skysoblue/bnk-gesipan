@@ -137,7 +137,8 @@ public class MemberDaoImpl implements MemberDao{
 		String sql = "select * from member where ? = ?";
 		try {
 			pstmt  = connector.prepareStatement(sql);
-			
+			pstmt.setString(1, command.getKeyField());
+			pstmt.setString(2, command.getKeyword());
 			rs = pstmt.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
